@@ -1,1 +1,2 @@
 Civic Action Network Team Contract
+Dylan Carter- I will be working the Framework and development portion of this project to help tie the whole thing together. I also will try to help everyone else with anything they need so that we can accomplish our goals in an efficient manner. 

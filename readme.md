@@ -29,3 +29,5 @@ Dylan Carter- I will be working the Framework and development portion of this pr
 Bryson DeLozier- I will be working on the front-end HTML, CSS, Javascript, and AJAX. Like Dylan, I will also be there to support my group-mates if any issues arise.
 
 Rayden King - I will be designing the Schema for our databases using SQLite and ensure that the relation of the entities will be comprehensible for the other members of the team. I will also support members in the event of a problem.
+
+Anthony Sandoval- I will be working on communicating with the client to ensure that their ideas are smoothly translated into our website design. I will also support and help my members with any front-end or back-end deployment as much as possible. 

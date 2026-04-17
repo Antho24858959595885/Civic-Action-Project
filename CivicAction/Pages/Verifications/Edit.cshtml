@@ -1,0 +1,50 @@
+@page
+@model CivicAction.Pages.Verifications.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Verification</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Verification.Id" />
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Verification.IsApproved" /> @Html.DisplayNameFor(model => model.Verification.IsApproved)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Verification.Feedback" class="control-label"></label>
+                <input asp-for="Verification.Feedback" class="form-control" />
+                <span asp-validation-for="Verification.Feedback" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Verification.AdminID" class="control-label"></label>
+                <select asp-for="Verification.AdminID" class="form-control" asp-items="ViewBag.AdminID" ></select>
+                <span asp-validation-for="Verification.AdminID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Verification.ProjectID" class="control-label"></label>
+                <select asp-for="Verification.ProjectID" class="form-control" asp-items="ViewBag.ProjectID" ></select>
+                <span asp-validation-for="Verification.ProjectID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

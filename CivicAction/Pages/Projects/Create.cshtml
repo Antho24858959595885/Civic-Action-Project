@@ -1,0 +1,81 @@
+@page
+@model CivicAction.Pages.Projects.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Project</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <h4>Validation Errors:</h4>
+                <ul>
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        @foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+        
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Project.Description" class="control-label"></label>
+                <input asp-for="Project.Description" class="form-control" />
+                <span asp-validation-for="Project.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.Hours" class="control-label"></label>
+                <input asp-for="Project.Hours" class="form-control" />
+                <span asp-validation-for="Project.Hours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.Organization" class="control-label"></label>
+                <input asp-for="Project.Organization" class="form-control" />
+                <span asp-validation-for="Project.Organization" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.Start" class="control-label"></label>
+                <input asp-for="Project.Start" class="form-control" type="date" />
+                <span asp-validation-for="Project.Start" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.End" class="control-label"></label>
+                <input asp-for="Project.End" class="form-control" type="date" />
+                <span asp-validation-for="Project.End" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Project.StudentID" class="control-label"></label>
+                <select asp-for="Project.StudentID" class="form-control" asp-items="ViewBag.StudentID">
+                    <option value="">-- Select a Student --</option>
+                </select>
+                <span asp-validation-for="Project.StudentID" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Project.IsApproved" />
+                    @Html.DisplayNameFor(model => model.Project.IsApproved)
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

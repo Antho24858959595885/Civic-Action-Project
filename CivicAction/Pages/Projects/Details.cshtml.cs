@@ -20,6 +20,10 @@ namespace CivicAction.Pages.Projects
         }
 
         public Project Project { get; set; } = default!;
+        public List<Update> Updates { get; set; } = new();
+
+        [BindProperty]
+        public Update NewUpdate { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,16 +32,60 @@ namespace CivicAction.Pages.Projects
                 return NotFound();
             }
 
-            var project = await _context.Projects.FirstOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects
+                .Include(p => p.Updates)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (project is not null)
             {
                 Project = project;
-
+                Updates = project.Updates.ToList();
                 return Page();
             }
 
             return NotFound();
+        }
+
+        public async Task<IActionResult> OnPostAsync(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects
+                .Include(p => p.Updates)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (project is null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                Project = project;
+                Updates = project.Updates.ToList();
+                return Page();
+            }
+
+            try
+            {
+                NewUpdate.ProjectID = project.Id;
+                NewUpdate.StudentID = project.StudentID;
+                _context.Updates.Add(NewUpdate);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding update: {ex.Message}");
+                ModelState.AddModelError("", $"Error adding update: {ex.Message}");
+                Project = project;
+                Updates = project.Updates.ToList();
+                return Page();
+            }
+
+            return RedirectToPage(new { id });
         }
     }
 }

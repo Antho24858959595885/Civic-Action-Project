@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CivicAction")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7a71084d1553954d6f010d739862c66fb54ea54")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d0a2da8f9d381696a643bbf06f3be0d2fddf9306")]
 [assembly: System.Reflection.AssemblyProductAttribute("CivicAction")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CivicAction")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

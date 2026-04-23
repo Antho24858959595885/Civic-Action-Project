@@ -55,6 +55,7 @@ namespace CivicAction.Pages.Projects
             {
                 Project.StudentID = (int)HttpContext.Session.GetInt32("AccountId")!;
                 Project.IsApproved = false;
+                Project.IsWorkshop = false;
                 _context.Projects.Add(Project);
                 await _context.SaveChangesAsync();
             }

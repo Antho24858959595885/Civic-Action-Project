@@ -19,6 +19,7 @@ public class Project
     public DateOnly End { get; set; }
     public int StudentID { get; set; }
     public bool IsApproved { get; set; }
+    public bool IsWorkshop { get; set; }
 
     public Account? Student { get; set; }
     public ICollection<Update> Updates { get; set; } = new List<Update>();

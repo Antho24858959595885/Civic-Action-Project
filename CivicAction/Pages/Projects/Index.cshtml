@@ -21,6 +21,7 @@
                 <th>Student</th>
                 <th>Approved</th>
             }
+            <th>Workshop</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -39,6 +40,7 @@
                     <td>@Html.DisplayFor(modelItem => project.IsApproved)
                     </td>
                 }
+                <td>@project.IsWorkshop</td>
                 <td>
                     <a asp-page="./Details" asp-route-id="@project.Id">Details</a>
                 </td>

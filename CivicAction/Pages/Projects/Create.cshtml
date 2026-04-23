@@ -66,6 +66,12 @@
                     @Html.DisplayNameFor(model => model.Project.IsApproved)
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Project.IsWorkshop" />
+                    @Html.DisplayNameFor(model => model.Project.IsWorkshop)
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
         </form>
     </div>
 </div>

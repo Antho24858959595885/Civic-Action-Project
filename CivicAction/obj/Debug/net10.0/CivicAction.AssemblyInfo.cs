@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CivicAction")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b179cb8942da0a89e212367152378f929ee2e91f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+371054ee734cd4b73796f21cc5cac5a44e18b9df")]
 [assembly: System.Reflection.AssemblyProductAttribute("CivicAction")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CivicAction")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

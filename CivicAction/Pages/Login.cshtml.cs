@@ -27,6 +27,6 @@ public class LoginModel(CivicActionContext context, IHttpContextAccessor httpCon
 
     httpContext.HttpContext!.Session.SetInt32("AccountId", account.Id);
     httpContext.HttpContext!.Session.SetString("IsAdmin", account.IsAdmin.ToString());
-    return RedirectToPage("/Index");
+    return RedirectToPage("/Projects/index");
 }
 }

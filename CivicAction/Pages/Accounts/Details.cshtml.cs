@@ -23,28 +23,17 @@ namespace CivicAction.Pages.Accounts
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            var isAdmin = HttpContext.Session.GetString("IsAdmin") == "True";
-
-            if (!isAdmin)
-            {
-                return RedirectToPage("/Projects/Index");
-            }
-
             if (id == null)
             {
                 return NotFound();
             }
 
-            var account = await _context.Accounts
-                .Include(a => a.Projects)
-                    .ThenInclude(p => p.Updates)
-                .Include(a => a.Projects)
-                    .ThenInclude(p => p.Verifications)
-                .FirstOrDefaultAsync(m => m.Id == id && !m.IsAdmin);
+            var account = await _context.Accounts.FirstOrDefaultAsync(m => m.Id == id);
 
             if (account is not null)
             {
                 Account = account;
+
                 return Page();
             }
 

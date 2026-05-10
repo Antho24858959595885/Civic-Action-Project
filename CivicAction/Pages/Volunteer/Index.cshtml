@@ -7,120 +7,62 @@
 
 <h1>Volunteer Hours</h1>
 
-<p>Choose an organization to view your projects and log volunteer hours.</p>
+<p>Add volunteer organizations and keep track of your hours.</p>
+
+<div class="row">
+    <div class="col-md-5">
+        <h4>Add Organization</h4>
+
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="NewOrganizationName" class="control-label">Organization Name</label>
+                <input asp-for="NewOrganizationName" class="form-control" />
+                <span asp-validation-for="NewOrganizationName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-2">
+                <input type="submit" value="Add Organization" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr />
+
+<h4>Your Organizations</h4>
 
 @if (Model.Organizations.Count == 0)
 {
-    <p>You do not have any volunteer organizations saved yet.</p>
+    <p>No organizations have been added yet.</p>
 }
 else
 {
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Organizations</h4>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Organization</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var organization in Model.Organizations)
-                    {
-                        <tr>
-                            <td>@organization</td>
-                            <td>
-                                <a asp-page="./Index" asp-route-organization="@organization">Open</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-md-8">
-            @if (string.IsNullOrWhiteSpace(Model.SelectedOrganization))
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Organization</th>
+                <th>Total Hours</th>
+                <th>Open</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var organization in Model.Organizations)
             {
-                <h4>Select an Organization</h4>
-                <p>Click an organization to log hours for one of its projects.</p>
+                <tr>
+                    <td>@organization.Name</td>
+                    <td>@organization.VolunteerHours.Sum(h => h.Hours)</td>
+                    <td>
+                        <a asp-page="/Volunteer/Details" asp-route-id="@organization.Id">Details</a>
+                    </td>
+                </tr>
             }
-            else
-            {
-                <h4>@Model.SelectedOrganization</h4>
-
-                @if (Model.SelectedProjects.Count == 0)
-                {
-                    <p>No projects found for this organization.</p>
-                }
-                else
-                {
-                    @foreach (var project in Model.SelectedProjects)
-                    {
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">@project.Title</h5>
-
-                                <p><strong>Description:</strong> @project.Description</p>
-                                <p><strong>Required Hours:</strong> @project.Hours</p>
-                                <p><strong>Total Logged:</strong> @project.Updates.Sum(u => u.HoursDone)</p>
-
-                                <h6>Logged Hours</h6>
-
-                                @if (project.Updates.Count == 0)
-                                {
-                                    <p>No hours logged yet.</p>
-                                }
-                                else
-                                {
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Work Completed</th>
-                                                <th>Hours</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var update in project.Updates)
-                                            {
-                                                <tr>
-                                                    <td>@update.Description</td>
-                                                    <td>@update.HoursDone</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                }
-
-                                <form method="post" asp-page-handler="AddHours">
-                                    <input type="hidden" name="projectId" value="@project.Id" />
-                                    <input type="hidden" name="organization" value="@Model.SelectedOrganization" />
-
-                                    <div class="form-group">
-                                        <label asp-for="NewUpdate.Description" class="control-label">Work Completed</label>
-                                        <textarea asp-for="NewUpdate.Description" class="form-control" rows="2"></textarea>
-                                        <span asp-validation-for="NewUpdate.Description" class="text-danger"></span>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label asp-for="NewUpdate.HoursDone" class="control-label">Hours</label>
-                                        <input asp-for="NewUpdate.HoursDone" class="form-control" type="number" step="0.5" />
-                                        <span asp-validation-for="NewUpdate.HoursDone" class="text-danger"></span>
-                                    </div>
-
-                                    <div class="form-group mt-2">
-                                        <input type="submit" value="Add Hours" class="btn btn-primary" />
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    }
-                }
-            }
-        </div>
-    </div>
+        </tbody>
+    </table>
 }
+
+<p><strong>Total Volunteer Hours:</strong> @Model.TotalHours</p>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

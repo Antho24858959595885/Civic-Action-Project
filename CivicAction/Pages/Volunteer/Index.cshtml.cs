@@ -11,16 +11,11 @@ namespace CivicAction.Pages.Volunteer;
 [Authorize]
 public class IndexModel(CivicActionContext context, UserManager<AppUser> userManager) : PageModel
 {
-    public List<string> Organizations { get; set; } = new();
-    public List<Project> SelectedProjects { get; set; } = new();
-
-    [BindProperty(SupportsGet = true)]
-    public string? Organization { get; set; }
-
-    public string? SelectedOrganization { get; set; }
+    public List<VolunteerOrganization> Organizations { get; set; } = new();
+    public double TotalHours { get; set; }
 
     [BindProperty]
-    public Update NewUpdate { get; set; } = new();
+    public string NewOrganizationName { get; set; } = string.Empty;
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -28,7 +23,7 @@ public class IndexModel(CivicActionContext context, UserManager<AppUser> userMan
 
         if (user == null)
         {
-            return RedirectToPage("/Account/Login");
+            return RedirectToPage("/Index");
         }
 
         if (user.IsAdmin)
@@ -36,18 +31,18 @@ public class IndexModel(CivicActionContext context, UserManager<AppUser> userMan
             return RedirectToPage("/Projects/Index");
         }
 
-        await LoadPageData(user.Id, Organization);
+        await LoadPageData(user.Id);
 
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAddHoursAsync(int projectId, string organization)
+    public async Task<IActionResult> OnPostAsync()
     {
         var user = await userManager.GetUserAsync(User);
 
         if (user == null)
         {
-            return RedirectToPage("/Account/Login");
+            return RedirectToPage("/Index");
         }
 
         if (user.IsAdmin)
@@ -55,56 +50,35 @@ public class IndexModel(CivicActionContext context, UserManager<AppUser> userMan
             return RedirectToPage("/Projects/Index");
         }
 
-        ModelState.Remove("NewUpdate.StudentID");
-        ModelState.Remove("NewUpdate.ProjectID");
-        ModelState.Remove("NewUpdate.Project");
-
-        var project = await context.Projects
-            .FirstOrDefaultAsync(p => p.Id == projectId && p.StudentID == user.Id);
-
-        if (project == null)
+        if (string.IsNullOrWhiteSpace(NewOrganizationName))
         {
-            return NotFound();
-        }
-
-        if (!ModelState.IsValid)
-        {
-            await LoadPageData(user.Id, organization);
+            ModelState.AddModelError("NewOrganizationName", "Organization name is required");
+            await LoadPageData(user.Id);
             return Page();
         }
 
-        NewUpdate.ProjectID = project.Id;
-        NewUpdate.StudentID = user.Id;
-        NewUpdate.IsWorkshop = false;
+        var organization = new VolunteerOrganization
+        {
+            Name = NewOrganizationName,
+            StudentID = user.Id
+        };
 
-        context.Updates.Add(NewUpdate);
+        context.VolunteerOrganizations.Add(organization);
         await context.SaveChangesAsync();
 
-        return RedirectToPage("./Index", new { organization });
+        return RedirectToPage("/Volunteer/Details", new { id = organization.Id });
     }
 
-    private async Task LoadPageData(string studentId, string? selectedOrganization)
+    private async Task LoadPageData(string studentId)
     {
-        var projects = await context.Projects
-            .Include(p => p.Updates)
-            .Where(p => p.StudentID == studentId)
-            .OrderBy(p => p.Organization)
-            .ThenBy(p => p.Title)
+        Organizations = await context.VolunteerOrganizations
+            .Include(o => o.VolunteerHours)
+            .Where(o => o.StudentID == studentId)
+            .OrderBy(o => o.Name)
             .ToListAsync();
 
-        Organizations = projects
-            .Select(p => p.Organization)
-            .Where(o => !string.IsNullOrWhiteSpace(o))
-            .Distinct()
-            .ToList();
-
-        SelectedOrganization = selectedOrganization;
-
-        if (!string.IsNullOrWhiteSpace(selectedOrganization))
-        {
-            SelectedProjects = projects
-                .Where(p => p.Organization == selectedOrganization)
-                .ToList();
-        }
+        TotalHours = Organizations
+            .SelectMany(o => o.VolunteerHours)
+            .Sum(h => h.Hours);
     }
 }
